@@ -2,17 +2,27 @@
 
 set -o errexit -o pipefail -o noclobber -o nounset
 
+STRONG=false
+WORDS=1
+NUMBER=1
+
+if [[ ${#} -eq 0 ]] ; then
+	FILE=""
+else
+	FILE="${@: -1}"
+fi
+
 while getopts "s:w:n:" opt; do
 	case ${opt} in
 		s)
-			STRONG=true
+			$STRONG=true
 			shift $((OPTIND-1))
 			;;
 		w)
-			WORDS=$OPTARG
+			$WORDS=$OPTARG
 			;;
 		n)	
-			NUMBER=$OPTARG
+			$NUMBER=$OPTARG
 			;;
 		\? )
 			echo "Invalid option: $OPTARG" 1>&2
@@ -21,8 +31,8 @@ while getopts "s:w:n:" opt; do
 	esac
 done
 
-echo "Strong is $STRONG"
-echo "Words is $WORDS"
-echo "Number is $NUMBER"
-echo "File is $FILE"
+echo $STRONG
+echo $WORDS
+echo $NUMBER
+echo $FILE
 exit 0;
