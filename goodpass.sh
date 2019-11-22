@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -o errexit -o pipefail -o noclobber -o nounset
+
+DICTIONARY="/usr/share/dict/american-english"
 
 STRONG=false
 WORDS=1
@@ -15,14 +17,14 @@ fi
 while getopts "s:w:n:" opt; do
 	case ${opt} in
 		s)
-			$STRONG=true
+			STRONG=true
 			shift $((OPTIND-1))
 			;;
 		w)
-			$WORDS=$OPTARG
+			WORDS=$OPTARG
 			;;
 		n)	
-			$NUMBER=$OPTARG
+			NUMBER=$OPTARG
 			;;
 		\? )
 			echo "Invalid option: $OPTARG" 1>&2
@@ -31,8 +33,25 @@ while getopts "s:w:n:" opt; do
 	esac
 done
 
-echo $STRONG
-echo $WORDS
-echo $NUMBER
-echo $FILE
+DICTLNS=$(wc -l $DICTIONARY | awk '{print $1}')
+
+for n in $NUMBER; do
+	PASSWORD=""
+	for ((i=1; i <= $WORDS; i++)); do
+		WORD="$(sed -n "$(shuf -i 1-$DICTLNS -n 1)p" $DICTIONARY)"
+		PASSWORD=$PASSWORD$WORD
+	done
+	PASSWORD="${PASSWORD//\'}"
+	echo $PASSWORD
+done
+
+# echo $DICTLNS
+# echo $RAND
+
+# echo $DICTLNS
+# echo $MULT
+# echo $STRONG
+# echo $WORDS
+# echo $NUMBER
+# echo $FILE
 exit 0;
