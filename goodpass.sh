@@ -4,6 +4,7 @@
 #Specified dictionary
 DICTIONARY="/usr/share/dict/american-english"
 
+#Default values for arguments
 STRONG=false
 WORDS=3
 NUMBER=1
