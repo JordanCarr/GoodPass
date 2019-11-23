@@ -8,12 +8,16 @@ STRONG=false
 WORDS=3
 NUMBER=1
 FILE=""
+UNDSCR=""
 
 #Handle option arguments for strength, num of words, and num of passwords
-while getopts "sw:n:" opt; do
+while getopts "suw:n:" opt; do
 	case ${opt} in
 		s)
 			STRONG=true
+			;;
+		u)
+			UNDSCR=true
 			;;
 		w)
 			WORDS=$OPTARG
@@ -47,8 +51,14 @@ for ((n=1; n <= $NUMBER; n++)); do
 	# Exctract random words from dictionary
 	for ((i=1; i <= $WORDS; i++)); do
 		WORD="$(sed -n "$(shuf -i 1-$DICTLNS -n 1)p" $DICTIONARY)"
-		PASSWORD=$PASSWORD$WORD
+		#Handle adding underscore between words or not
+		if [[ ! -z $UNDSCR ]] && [[ $i > 1 ]] ; then
+			PASSWORD=$PASSWORD"_"$WORD
+		else
+			PASSWORD=$PASSWORD$WORD
+		fi
 	done
+	
 	#Link03
 	#Remove unnecessary puntuation in dictionary word
 	PASSWORD="${PASSWORD//\'}"
@@ -73,7 +83,7 @@ for ((n=1; n <= $NUMBER; n++)); do
 	for VOW in ${REPVOWELS[*]} ; do
 		#Link06
 		#Replace vowel with generally password compatible character or digit 
-		CH=$(head /dev/urandom | tr -dc '0-9!"#$%&()*+,-.=?@[\]^_`{|}~' | head -c 1)
+		CH=$(head /dev/urandom | tr -dc '0-9!"#$%&()*+,-.=?@[\]^`{|}~' | head -c 1)
 		PASSWORD=${PASSWORD//$VOW/$CH}
 	done
 
