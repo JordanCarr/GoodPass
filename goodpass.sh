@@ -20,14 +20,24 @@ while getopts "suw:n:" opt; do
 			UNDSCR=true
 			;;
 		w)
+			if [[ ! $OPTARG =~ [0-9]+ ]] ; then
+				echo "Invalid argument: $OPTARG" 1>&2
+				exit 1
+			fi
+
 			WORDS=$OPTARG
 			;;
-		n)	
+		n)
+			if [[ ! $OPTARG =~ [0-9]+ ]] ; then
+                                echo "Invalid argument: $OPTARG" 1>&2
+                                exit 1
+                        fi
+			
 			NUMBER=$OPTARG
 			;;
 
 		\? )
-			echo "Invalid option: $OPTARG" 1>&2
+			echo "Invalid argument: $OPTARG" 1>&2
 			exit 1
 			;;
 	esac
@@ -40,6 +50,15 @@ shift $((OPTIND-1))
 #If there is a remaining argument this will be interpreted as a filename to store the passwords
 if [[ $# = 1 ]] ; then
 	FILE=$1
+	#Handle non-existent file
+	if [[ ! -f $FILE ]] ; then
+		$(touch "$FILE") 
+	fi
+	#Check file is writable
+	if [[ ! -w $FILE ]] ; then 
+		echo "File has insufficient write permissions: $FILE"
+		exit 1
+	fi
 fi
 
 #Count how many words in dictionary file by line count
