@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+#title           :goodpass.sh
+#description     :This script generates passwords based on a dictionary
+#author		 :Jordan Carr
+#date            :20191122
+#version         :1.0
+#usage		 :bash goodpass.sh
+#notes           :Ensure dictionary present at /usr/share/dict/american-english
+#bash_version    :4.4.20(1)-release
+#==============================================================================
+
 #Link01
 
 #Specified dictionary
