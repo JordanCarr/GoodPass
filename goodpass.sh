@@ -11,7 +11,7 @@ FILE=""
 UNDSCR=""
 
 #Handle option arguments for strength, num of words, and num of passwords
-while getopts "suw:n:" opt; do
+while getopts "suw:n:h" opt; do
 	case ${opt} in
 		s)
 			STRONG=true
@@ -34,6 +34,17 @@ while getopts "suw:n:" opt; do
                         fi
 			
 			NUMBER=$OPTARG
+			;;
+
+		h)
+			echo "Usage: goodpass -n <intiger> -w <intiger> -s -u fn"
+			echo ""
+			echo "-n : Number of passwords to generate"
+			echo "-w : Number of words to use per password"
+		       	echo "-s : Strong passwords with vowels replaced by special characters"
+			echo "-u : Add Underscores between words in each password"
+			echo "fn : Filename for passwords to be appended into"
+			exit 1
 			;;
 
 		\? )
